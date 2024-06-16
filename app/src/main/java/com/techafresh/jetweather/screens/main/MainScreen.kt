@@ -10,10 +10,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -60,14 +62,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle.Companion.Italic
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.canopas.lib.showcase.IntroShowcase
+import com.canopas.lib.showcase.IntroShowcaseScope
+import com.canopas.lib.showcase.component.ShowcaseStyle
+import com.techafresh.jetweather.R
 import com.techafresh.jetweather.components.HumidityPressureRow
 import com.techafresh.jetweather.components.SunsetSunRiseRow
 import com.techafresh.jetweather.components.WeatherDetailRow
@@ -264,17 +272,66 @@ fun WeatherAppBar(
         )},
         actions = {
             if (isMainScreen){
-                IconButton(onClick = { onActionClicked.invoke() }) {
-                    Icon(
-                        imageVector = Icons.Filled.Search,
-                        contentDescription = "Search Icon"
-                    )
+
+                var showAppIntro2 by remember {
+                    mutableStateOf(true)
+                }
+
+                IntroShowcase(
+                    showIntroShowCase = showAppIntro2,
+                    dismissOnClickOutside = true,
+                    onShowCaseCompleted = { showAppIntro2 = false }
+                ) {
+                    IconButton(
+
+                        modifier = Modifier.introShowCaseTarget(
+                            index = 1,
+                            style = ShowcaseStyle.Default.copy(
+                                backgroundColor = Color(0xFF7C99AC), // specify color of background
+                                backgroundAlpha = 0.5f, // specify transparency of background
+                                targetCircleColor = Color.White // specify color of target circle
+                            ),
+                        ){
+                            Column {
+                                Text(
+                                    text = "Search your favourite cities!!",
+                                    color = Color.White,
+                                    fontSize = 24.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+
+                                Text(
+                                    text = "You can search your favourite cities by clicking here.",
+                                    color = Color.White,
+                                    fontSize = 16.sp
+                                )
+
+                                Spacer(modifier = Modifier.height(10.dp))
+
+                                Icon(
+                                    painterResource(id = R.drawable.search_example),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .size(80.dp)
+                                        .align(Alignment.End),
+                                    tint = Color.White
+                                )
+                            }
+                        },
+
+                        onClick = { onActionClicked.invoke() }) {
+                        Icon(
+                            imageVector = Icons.Filled.Search,
+                            contentDescription = "Search Icon"
+                        )
+                    }
+
                 }
 
                 IconButton(
                     onClick = {
-                    showDialog.value = true
-                }) {
+                        showDialog.value = true
+                    }) {
                     Icon(
                         imageVector = Icons.Filled.MoreVert,
                         contentDescription = "More"
@@ -298,18 +355,55 @@ fun WeatherAppBar(
                          (item.city == appBarTitle.split(",")[0])
                      }
                  if (isAlreadyFavList.isEmpty()){
-                     IconButton(onClick = {
-                         favViewModel.addToFav(Favourite(appBarTitle.split(",")[0], appBarTitle.split(",")[1]))
-                             .run {
-                                 showIt.value = true
-                             }
-                     }) {
-                         Icon(
-                             imageVector = Icons.Filled.Favorite,
-                             contentDescription = null,
-                             tint = Color.Red.copy(alpha = 0.6f),
-                         )
+                     var showAppIntro by remember {
+                         mutableStateOf(true)
                      }
+                     IntroShowcase(
+                         showIntroShowCase = showAppIntro,
+                         dismissOnClickOutside = true,
+                         onShowCaseCompleted = { showAppIntro = false }
+                     ) {
+                         IconButton(
+
+                             // Intro
+                             modifier = Modifier.introShowCaseTarget(
+                                 index = 0,
+                                 style = ShowcaseStyle.Default.copy(
+                                     backgroundColor = Color(0xFF9AD0EC),
+                                     backgroundAlpha = 0.98f,
+                                     targetCircleColor = Color(0xFFFFC400)
+                                 )
+                             ){
+                              Column {
+                                  Text(
+                                      text = "Add to Favourites!!",
+                                      color = Color.White,
+                                      fontSize = 24.sp,
+                                      fontWeight = FontWeight.Bold
+                                  )
+
+                                  Text(
+                                      text = "You can add your favourite cities to favourites by clicking here.",
+                                      color = Color.White,
+                                      fontSize = 16.sp
+                                  )
+                              }
+                             },
+
+                             onClick = {
+                                 favViewModel.addToFav(Favourite(appBarTitle.split(",")[0], appBarTitle.split(",")[1]))
+                                     .run {
+                                         showIt.value = true
+                                     }
+                             }) {
+                             Icon(
+                                 imageVector = Icons.Filled.Favorite,
+                                 contentDescription = null,
+                                 tint = Color.Red.copy(alpha = 0.6f),
+                             )
+                         }
+                     }
+
                  }else { showIt.value = false
                      Box {} }
                 ShowToast(context = context, showIt)
