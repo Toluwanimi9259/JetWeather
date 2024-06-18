@@ -83,6 +83,14 @@ dependencies {
     // Intro Show case View
     implementation("com.canopas.intro-showcase-view:introshowcaseview:2.0.1")
 
+    // For AppWidgets support
+    implementation("androidx.glance:glance-appwidget:1.1.0")
+
+    // For interop APIs with Material 3
+    implementation("androidx.glance:glance-material3:1.1.0")
+
+
+
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.activity:activity-compose:1.8.2")
@@ -98,4 +106,5 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
 }

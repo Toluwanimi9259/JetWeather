@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider
+    android:description="@string/app_name"
+    android:minWidth="140dp"
+    android:minHeight="120dp"
+    android:minResizeWidth="140dp"
+    android:minResizeHeight="100dp"
+    android:maxResizeHeight="280dp"
+    android:maxResizeWidth="260dp"
+    android:previewImage="@drawable/sunrise"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="1000"
+    android:widgetCategory="home_screen"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    />
